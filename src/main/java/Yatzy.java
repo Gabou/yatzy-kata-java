@@ -3,34 +3,6 @@ import java.util.stream.IntStream;
 
 public class Yatzy {
 
-    public static int chance(int d1, int d2, int d3, int d4, int d5) {
-        return d1 + d2 + d3 + d4 + d5;
-    }
-
-    public static int yatzy(int... dice) {
-        boolean yatzy = Arrays.stream(dice).allMatch(value -> value == dice[0]);
-        return yatzy ? 50 : 0;
-    }
-
-    public static int ones(int d1, int d2, int d3, int d4, int d5) {
-        return IntStream.of(d1, d2, d3, d4, d5).filter(die -> die == 1).sum();
-    }
-
-    public static int twos(int d1, int d2, int d3, int d4, int d5) {
-        return IntStream.of(d1, d2, d3, d4, d5).filter(die -> die == 2).sum();
-    }
-
-    public static int threes(int d1, int d2, int d3, int d4, int d5) {
-        int s;    
-        s = 0;
-        if (d1 == 3) s += 3;
-        if (d2 == 3) s += 3;
-        if (d3 == 3) s += 3;
-        if (d4 == 3) s += 3;
-        if (d5 == 3) s += 3;
-        return s;
-    }
-
     protected int[] dice;
     public Yatzy(int d1, int d2, int d3, int d4, int _5)
     {
@@ -42,35 +14,44 @@ public class Yatzy {
         dice[4] = _5;
     }
 
-    public int fours()
-    {
-        int sum;    
-        sum = 0;
-        for (int at = 0; at != 5; at++) {
-            if (dice[at] == 4) {
-                sum += 4;
-            }
-        }
-        return sum;
+    public static int chance(int d1, int d2, int d3, int d4, int d5) {
+        return d1 + d2 + d3 + d4 + d5;
     }
 
-    public int fives()
-    {
-        int s = 0;
-        int i;
-        for (i = 0; i < dice.length; i++) 
-            if (dice[i] == 5)
-                s = s + 5;
-        return s;
+    public static int yatzy(int... dice) {
+        boolean yatzy = Arrays.stream(dice).allMatch(value -> value == dice[0]);
+        return yatzy ? 50 : 0;
     }
 
-    public int sixes()
-    {
-        int sum = 0;
-        for (int die : dice)
-            if (die == 6)
-                sum = sum + 6;
-        return sum;
+    public static int ones(int d1, int d2, int d3, int d4, int d5) {
+        int[] dice = {d1, d2, d3, d4, d5};
+        return sumSameDice(1, dice);
+    }
+
+    public static int twos(int d1, int d2, int d3, int d4, int d5) {
+        int[] dice = {d1, d2, d3, d4, d5};
+        return sumSameDice(2, dice);
+    }
+
+    public static int threes(int d1, int d2, int d3, int d4, int d5) {
+        int[] dice = {d1, d2, d3, d4, d5};
+        return sumSameDice(3, dice);
+    }
+
+    public int fours() {
+        return sumSameDice(4, dice);
+    }
+
+    public int fives() {
+        return sumSameDice(5, dice);
+    }
+
+    public int sixes() {
+        return sumSameDice(6, dice);
+    }
+
+    private static int sumSameDice(int category, int[] dice) {
+        return IntStream.of(dice).filter(die -> die == category).sum();
     }
 
     public static int score_pair(int d1, int d2, int d3, int d4, int d5)
