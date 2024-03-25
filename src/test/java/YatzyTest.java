@@ -23,7 +23,7 @@ public class YatzyTest {
     }
 
     @Test
-    public void test_2s() {
+    public void test_twos() {
         assertEquals(4, Yatzy.twos(1,2,3,2,6));
         assertEquals(10, Yatzy.twos(2,2,2,2,2));
     }
