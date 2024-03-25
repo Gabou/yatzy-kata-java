@@ -66,25 +66,18 @@ public class Yatzy {
         return Arrays.stream(dice).filter(value -> value == die).count() >= 2;
     }
 
-    public static int two_pair(int d1, int d2, int d3, int d4, int d5)
-    {
-        int[] counts = new int[6];
-        counts[d1-1]++;
-        counts[d2-1]++;
-        counts[d3-1]++;
-        counts[d4-1]++;
-        counts[d5-1]++;
-        int n = 0;
-        int score = 0;
-        for (int i = 0; i < 6; i += 1)
-            if (counts[6-i-1] >= 2) {
-                n++;
-                score += (6-i);
-            }        
-        if (n == 2)
-            return score * 2;
-        else
+    public static int two_pair(int d1, int d2, int d3, int d4, int d5) {
+        int[] dice = {d1, d2, d3, d4, d5};
+        int[] pairs = Arrays.stream(dice)
+                .filter(die -> hasPair(die, dice))
+                .distinct()
+                .toArray();
+
+        if (pairs.length != 2) {
             return 0;
+        } else {
+            return Arrays.stream(pairs).sum() * 2;
+        }
     }
 
     public static int four_of_a_kind(int _1, int _2, int d3, int d4, int d5)
