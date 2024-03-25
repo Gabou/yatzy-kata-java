@@ -67,16 +67,20 @@ public class Yatzy {
 
     public static int two_pair(int d1, int d2, int d3, int d4, int d5) {
         int[] dice = {d1, d2, d3, d4, d5};
-        int[] pairs = Arrays.stream(dice)
-                .filter(die -> hasPair(die, dice))
-                .distinct()
-                .toArray();
+        int[] pairs = retrievePairs(dice);
 
         if (pairs.length != 2) {
             return 0;
         } else {
             return Arrays.stream(pairs).sum() * 2;
         }
+    }
+
+    private static int[] retrievePairs(int[] dice) {
+        return Arrays.stream(dice)
+                .filter(die -> hasPair(die, dice))
+                .distinct()
+                .toArray();
     }
 
     public static int four_of_a_kind(int d1, int d2, int d3, int d4, int d5) {
@@ -121,39 +125,16 @@ public class Yatzy {
 
     public static int fullHouse(int d1, int d2, int d3, int d4, int d5)
     {
-        int[] tallies;
-        boolean _2 = false;
-        int i;
-        int _2_at = 0;
-        boolean _3 = false;
-        int _3_at = 0;
 
+        int[] dice = {d1, d2, d3, d4, d5};
+        int[] pairs = retrievePairs(dice);
+        int threeOfAKind = computeNumberOfAKind(3, d1, d2, d3, d4, d5);
 
-
-
-        tallies = new int[6];
-        tallies[d1-1] += 1;
-        tallies[d2-1] += 1;
-        tallies[d3-1] += 1;
-        tallies[d4-1] += 1;
-        tallies[d5-1] += 1;
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 2) {
-                _2 = true;
-                _2_at = i+1;
-            }
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 3) {
-                _3 = true;
-                _3_at = i+1;
-            }
-
-        if (_2 && _3)
-            return _2_at * 2 + _3_at * 3;
-        else
+        if (pairs.length < 2) {
             return 0;
+        }
+
+        return Arrays.stream(pairs).filter(die -> die != threeOfAKind/3).findFirst().orElse(0) * 2 + threeOfAKind;
     }
 }
 
