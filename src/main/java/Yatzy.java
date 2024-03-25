@@ -1,27 +1,22 @@
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Yatzy {
 
-    private final int[] dice;
+    private final List<Integer> dice;
 
     public Yatzy(int d1, int d2, int d3, int d4, int d5) {
-        dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
+        dice = Arrays.asList(d1, d2, d3, d4, d5);
     }
 
     public int chance() {
-        return Arrays.stream(dice).sum();
+        return dice.stream().mapToInt(Integer::intValue).sum();
     }
 
     public int yatzy() {
-        boolean yatzy = Arrays.stream(dice).allMatch(value -> value == dice[0]);
+        boolean yatzy = dice.stream().allMatch(die -> die.equals(dice.getFirst()));
         return yatzy ? 50 : 0;
     }
 
@@ -54,12 +49,12 @@ public class Yatzy {
     }
 
     public int twoPairs() {
-        int[] pairs = retrievePairs(dice);
+        List<Integer> pairs = retrievePairs(dice);
 
-        if (pairs.length != 2) {
+        if (pairs.size() != 2) {
             return 0;
         } else {
-            return Arrays.stream(pairs).sum() * 2;
+            return pairs.stream().mapToInt(Integer::intValue).sum() * 2;
         }
     }
 
@@ -80,34 +75,33 @@ public class Yatzy {
     }
 
     public int fullHouse() {
-        int[] pairs = retrievePairs(dice);
+        List<Integer> pairs = retrievePairs(dice);
         int threeOfAKind = computeNumberOfAKind(3);
 
-        if (pairs.length < 2) {
+        if (pairs.size() < 2) {
             return 0;
         }
 
-        return Arrays.stream(pairs).filter(die -> die != threeOfAKind / 3).findFirst().orElse(0) * 2 + threeOfAKind;
+        return pairs.stream().filter(die -> die != threeOfAKind / 3).findFirst().orElse(0) * 2 + threeOfAKind;
     }
 
-    private int sumSameDice(int category, int[] dice) {
-        return IntStream.of(dice).filter(die -> die == category).sum();
+    private int sumSameDice(int category, List<Integer> dice) {
+        return dice.stream().mapToInt(Integer::intValue).filter(die -> die == category).sum();
     }
 
-    private boolean hasPair(int die, int[] dice) {
-        return Arrays.stream(dice).filter(value -> value == die).count() >= 2;
-    }
-
-    private int[] retrievePairs(int[] dice) {
-        return Arrays.stream(dice)
+    private List<Integer> retrievePairs(List<Integer> dice) {
+        return dice.stream()
                 .filter(die -> hasPair(die, dice))
                 .distinct()
-                .toArray();
+                .toList();
+    }
+
+    private boolean hasPair(int die, List<Integer> dice) {
+        return dice.stream().filter(value -> value == die).count() >= 2;
     }
 
     private int computeNumberOfAKind(int numberOfDie) {
-        return Arrays.stream(dice)
-                .boxed()
+        return dice.stream()
                 .collect(Collectors.groupingBy(die -> die, Collectors.counting()))
                 .entrySet().stream()
                 .filter(entry -> entry.getValue() >= numberOfDie)
@@ -118,9 +112,9 @@ public class Yatzy {
                 .orElse(0) * numberOfDie;
     }
 
-    private int computeStraight(int[] dice) {
-        if (Arrays.stream(dice).distinct().count() == 5) {
-            return Arrays.stream(dice).sum();
+    private int computeStraight(List<Integer> dice) {
+        if (dice.stream().distinct().count() == 5) {
+            return dice.stream().mapToInt(Integer::intValue).sum();
         }
         return 0;
     }
