@@ -1,15 +1,13 @@
-import java.util.List;
-
 public class TwoPairs implements Category {
     @Override
-    public int sum(List<Integer> dice) {
+    public int sum(Roll roll) {
 
-        int firstPair = NumbersOfAKindCategory.PAIR.sum(dice);
-        int secondPair = NumbersOfAKindCategory.PAIR.sum(dice.stream().filter(die -> die != firstPair/2).toList());
+        var diceWithSameValue = roll.retrieveDiceWithSameValue(2);
 
-        if (firstPair == 0 || secondPair == 0) {
-            return  0;
+        if (diceWithSameValue.size() != 2) {
+            return 0;
         }
-        return firstPair + secondPair;
+
+        return diceWithSameValue.stream().mapToInt(Integer::intValue).sum() * 2;
     }
 }

@@ -1,5 +1,3 @@
-import java.util.List;
-
 public enum NumbersCategory implements Category {
     ONES(1),
     TWOS(2),
@@ -15,7 +13,7 @@ public enum NumbersCategory implements Category {
     }
 
     @Override
-    public int sum(List<Integer> dice) {
-        return dice.stream().mapToInt(Integer::intValue).filter(die -> die == valueOfScoringDice).sum();
+    public int sum(Roll roll) {
+        return roll.sumDiceWithSameValue(valueOfScoringDice);
     }
 }

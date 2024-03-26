@@ -1,28 +1,20 @@
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public enum NumbersOfAKindCategory implements Category{
     PAIR(2),
     THREE_OF_A_KIND(3),
     FOUR_OF_A_KIND(4);
 
-    private final int numberOfScoringDice;
+    private final int numberOfDice;
 
-    NumbersOfAKindCategory(int numberOfScoringDice) {
-        this.numberOfScoringDice = numberOfScoringDice;
+    NumbersOfAKindCategory(int numberOfDice) {
+        this.numberOfDice = numberOfDice;
     }
 
     @Override
-    public int sum(List<Integer> dice) {
-        return dice.stream()
-                .collect(Collectors.groupingBy(die -> die, Collectors.counting()))
-                .entrySet().stream()
-                .filter(entry -> entry.getValue() >= numberOfScoringDice)
-                .map(Map.Entry::getKey)
-                .distinct()
+    public int sum(Roll roll) {
+        return roll.retrieveDiceWithSameValue(numberOfDice)
+                .stream()
                 .mapToInt(Integer::intValue)
                 .max()
-                .orElse(0) * numberOfScoringDice;
+                .orElse(0) * numberOfDice;
     }
 }
