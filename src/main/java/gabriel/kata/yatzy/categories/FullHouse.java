@@ -1,9 +1,15 @@
+package gabriel.kata.yatzy.categories;
+
+import gabriel.kata.yatzy.Roll;
+
 import java.util.function.Predicate;
 
-public class FullHouse implements Category {
+import static gabriel.kata.yatzy.categories.NumbersOfAKindCategory.ThreeOfAKind;
+
+public final class FullHouse implements Category {
     @Override
     public int sum(Roll roll) {
-        int threeOfAKind = NumbersOfAKindCategory.THREE_OF_A_KIND.sum(roll);
+        int threeOfAKind = new ThreeOfAKind().sum(roll);
         int twoOfAKind = roll.retrieveDiceWithSameValue(2).stream()
                 .filter(diceWithDifferentValueThan(threeOfAKind / 3))
                 .findFirst()

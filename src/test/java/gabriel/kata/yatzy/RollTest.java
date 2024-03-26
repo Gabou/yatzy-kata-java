@@ -1,9 +1,34 @@
+package gabriel.kata.yatzy;
+
+import gabriel.kata.yatzy.categories.Chance;
+import gabriel.kata.yatzy.categories.FullHouse;
+import gabriel.kata.yatzy.categories.TwoPairs;
+import gabriel.kata.yatzy.categories.YatzyCategory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static gabriel.kata.yatzy.categories.NumbersCategory.Fives;
+import static gabriel.kata.yatzy.categories.NumbersCategory.Fours;
+import static gabriel.kata.yatzy.categories.NumbersCategory.Ones;
+import static gabriel.kata.yatzy.categories.NumbersCategory.Sixes;
+import static gabriel.kata.yatzy.categories.NumbersCategory.Threes;
+import static gabriel.kata.yatzy.categories.NumbersCategory.Twos;
+import static gabriel.kata.yatzy.categories.NumbersOfAKindCategory.FourOfAKind;
+import static gabriel.kata.yatzy.categories.NumbersOfAKindCategory.Pair;
+import static gabriel.kata.yatzy.categories.NumbersOfAKindCategory.ThreeOfAKind;
+import static gabriel.kata.yatzy.categories.StraightCategory.LargeStraight;
+import static gabriel.kata.yatzy.categories.StraightCategory.SmallStraight;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RollTest {
+
+    private Yatzy yatzy;
+
+    @BeforeEach
+    void setUp() {
+        yatzy = new Yatzy();
+    }
 
     @ParameterizedTest
     @CsvSource({
@@ -13,7 +38,9 @@ class RollTest {
             "3, 3, 4, 5, 1, 16"
     })
     void chance_scores_sum_of_all_dice_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(new Chance()));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new Chance(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -23,7 +50,9 @@ class RollTest {
             "1, 1, 1, 2, 1, 0"
     })
     void yatzy_scores_50_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(new Yatzy()));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new YatzyCategory(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -34,7 +63,9 @@ class RollTest {
             "3, 3, 3, 4, 5, 0"
     })
     void ones_scores_sum_of_all_one_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersCategory.ONES));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new Ones(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -44,7 +75,9 @@ class RollTest {
             "6, 6, 6, 6, 3, 0"
     })
     void twos_scores_sum_of_all_two_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersCategory.TWOS));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new Twos(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -54,7 +87,9 @@ class RollTest {
             "6, 6, 6, 6, 4, 0"
     })
     void threes_scores_sum_of_all_three_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersCategory.THREES));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new Threes(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -65,7 +100,9 @@ class RollTest {
             "1, 1, 2, 4, 4, 8"
     })
     void fours_scores_sum_of_all_four(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersCategory.FOURS));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new Fours(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -75,7 +112,9 @@ class RollTest {
             "4, 5, 5, 5, 5, 20"
     })
     void fives_scores_sum_of_all_five_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersCategory.FIVES));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new Fives(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -85,7 +124,9 @@ class RollTest {
             "6, 5, 6, 6, 5, 18"
     })
     void sixes_scores_sum_of_all_six_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersCategory.SIXES));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new Sixes(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -100,7 +141,9 @@ class RollTest {
             "3, 3, 3, 3, 1, 6"
     })
     void pair_scores_sum_of_two_highest_identical_dice_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersOfAKindCategory.PAIR));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new Pair(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -114,7 +157,9 @@ class RollTest {
             "3, 3, 3, 3, 1, 0"
     })
     void two_pair_scores_sum_of_two_different_pair_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(new TwoPairs()));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new TwoPairs(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -126,7 +171,9 @@ class RollTest {
             "3, 3, 3, 3, 1, 9"
     })
     void three_of_a_kind_scores_sum_of_three_identical_dice(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersOfAKindCategory.THREE_OF_A_KIND));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new ThreeOfAKind(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -138,7 +185,9 @@ class RollTest {
             "2, 2, 2, 2, 2, 8"
     })
     void four_of_a_kind_scores_sum_of_four_identical_dice_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(NumbersOfAKindCategory.FOUR_OF_A_KIND));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new FourOfAKind(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -148,7 +197,9 @@ class RollTest {
             "1, 2, 2, 4, 5, 0"
     })
     void small_straight_scores_sum_of_one_two_three_four_five_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(StraightCategory.SMALL));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new SmallStraight(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -158,7 +209,9 @@ class RollTest {
             "1, 2, 2, 4, 5, 0"
     })
     void large_straight_scores_sum_of_two_three_four_five_six_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(StraightCategory.LARGE));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new LargeStraight(), roll);
+        assertEquals(expectedResult, scores);
     }
 
     @ParameterizedTest
@@ -171,6 +224,8 @@ class RollTest {
             "4, 4, 4, 4, 4, 0"
     })
     void full_house_scores_sum_of_a_pair_and_a_three_of_a_kind_test(int dice1, int dice2, int dice3, int dice4, int dice5, int expectedResult) {
-        assertEquals(expectedResult, new Roll(dice1, dice2, dice3, dice4, dice5).scores(new FullHouse()));
+        var roll = new Roll(dice1, dice2, dice3, dice4, dice5);
+        var scores = yatzy.scores(new FullHouse(), roll);
+        assertEquals(expectedResult, scores);
     }
 }

@@ -1,4 +1,8 @@
-public class TwoPairs implements Category {
+package gabriel.kata.yatzy.categories;
+
+import gabriel.kata.yatzy.Roll;
+
+public final class TwoPairs implements Category {
     @Override
     public int sum(Roll roll) {
 
